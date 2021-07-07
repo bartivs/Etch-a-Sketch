@@ -38,3 +38,20 @@ body{
 .painted{
     background-color: black;
 }
+
+#colorPickerContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+#colorPickerContainer div{
+    margin: 0px 3px 0px 3px;
+}
+#matrixSizeContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 5px;
+    
+}

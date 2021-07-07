@@ -9,25 +9,26 @@ drawingDimensionPx=drawingDimensionPx.replace("px","");
 console.log(drawingDimensionPx);
 
 let drawingGrid=24;
-let pixelSize=Math.floor(drawingDimensionPx/drawingGrid);
 
 
-drawingContainer.style.gridTemplateColumns=`repeat(${drawingGrid},${pixelSize}px)`;
-drawingContainer.style.gridTemplateRows=`repeat(${drawingGrid},${pixelSize}px)`;
+
+
 
 //grid generation 
-fillGrid(drawingGrid,pixelSize);
+fillGrid(drawingGrid,drawingDimensionPx);
 
 //event listeners
 const pixels=document.querySelectorAll(".pixel"); 
 const reset=document.getElementById("reset");
+const matrixSizeSlider=document.getElementById("matrixSizeSlider");
 
-reset.addEventListener("click",pixelsClear);
+
 pixels.forEach( pixel  => pixel.addEventListener("mouseover",paintPixel));
+reset.addEventListener("click",pixelsClear);
+matrixSizeSlider.addEventListener("change",changeGridSize);
 
-
-
-function fillGrid(drawingGrid,pixelSize){
+function fillGrid(drawingGrid,drawingDimensionPx){
+    let pixelSize=Math.floor(drawingDimensionPx/drawingGrid);
     drawingContainer.style.gridTemplateColumns=`repeat(${drawingGrid},${pixelSize}px)`;
     drawingContainer.style.gridTemplateRows=`repeat(${drawingGrid},${pixelSize}px)`;
     
@@ -40,14 +41,17 @@ function fillGrid(drawingGrid,pixelSize){
 }
 function paintPixel(e){
     const pixel= document.getElementById(e.target.id);
-    pixel.classList.add("painted")
+    const currentColor  =document.getElementById("colorSelector");
+    pixel.style.backgroundColor=currentColor.value
 }
 
 function pixelsClear(e){
     console.log(e);
     const pixels = document.querySelectorAll(".pixel");
-    pixels.forEach( pixel => pixel.classList.remove("painted"))
+    const currentColor  =document.getElementById("colorSelector");
+    pixels.forEach( pixel => pixel.style.backgroundColor= currentColor.value )
 }
+
 
 
 
