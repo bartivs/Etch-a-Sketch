@@ -1,27 +1,19 @@
 
-
-function fillGrid(drawingGrid){
-    const drawingContainer=document.getElementById("drawingContainer"); 
-    let drawingDimensionPx=getComputedStyle(drawingContainer);
-   
-    drawingContainer.innerHTML=""
+function createGrid(drawingGridSize){
     
+    drawingContainer.style.gridTemplateColumns=`repeat(${drawingGridSize},1fr)`;
+    drawingContainer.style.gridTemplateRows=`repeat(${drawingGridSize},1fr)`;
     
-    drawingDimensionPx=drawingDimensionPx.height;
-    drawingDimensionPx=drawingDimensionPx.replace("px","");
-    console.log(drawingDimensionPx);
-    
-    let pixelSize=Math.floor(drawingDimensionPx/drawingGrid);
-   
-    drawingContainer.style.gridTemplateColumns=`repeat(${drawingGrid},${pixelSize}px)`;
-    drawingContainer.style.gridTemplateRows=`repeat(${drawingGrid},${pixelSize}px)`;
-    
-    for(let i=0; i< drawingGrid * drawingGrid ;i++){
+    for(let i=0; i< drawingGridSize * drawingGridSize ;i++){
         const pixel=document.createElement('div');
         pixel.classList.add("pixel");
         pixel.id=i;
         drawingContainer.appendChild(pixel);
     }
+    
+    const pixels=drawingContainer.querySelectorAll("div"); 
+    pixels.forEach( pixel  => pixel.addEventListener("mouseover",paintPixel));
+   
 }
 function paintPixel(e){
     const pixel= document.getElementById(e.target.id);
@@ -38,33 +30,43 @@ function pixelsClear(e){
 }
 
 function changeGridSize(e){
- console.log(e.target.value);
- let gridSize=Number(e.target.value); 
- fillGrid(gridSize);
+ const slider= document.getElementById("matrixSizeSlider");
+ console.log(slider.value) 
+ let gridSize=Number(slider.value);
+
+ const pixels=document.querySelectorAll(".pixel"); 
+ pixels.forEach(pixel=> pixel.remove());
+
+ const drawingContainer=document.getElementById("drawingContainer"); 
+ let drawingDimensionPx=getComputedStyle(drawingContainer);
+
+ createGrid(gridSize)
+}
+
+function updateGridSizeIndicator(e){
+    const gridSizeDiv= document.getElementById("gridSize"); 
+    gridSizeDiv.textContent=e.target.value;
 }
 
 
-const pixel= document.createElement("div");
-const pixel2= document.createElement("div");
 
 
 
 
-let drawingGrid=24;
+let drawingGridSize=24;
 
 
 
 
 
 //grid generation 
-fillGrid(drawingGrid);
+createGrid(drawingGridSize);
 
 //event listeners
-const pixels=document.querySelectorAll(".pixel"); 
+
 const reset=document.getElementById("reset");
-const matrixSizeSlider=document.getElementById("matrixSizeSlider");
-
-
-pixels.forEach( pixel  => pixel.addEventListener("mouseover",paintPixel));
+const matrixSizeSet=document.getElementById("setSize");
+const matrixSlider= document.getElementById("matrixSizeSlider");
 reset.addEventListener("click",pixelsClear);
-matrixSizeSlider.addEventListener("change",changeGridSize);
+matrixSizeSet.addEventListener("click",changeGridSize);
+matrixSizeSet.addEventListener("change",updateGridSizeIndicator);
